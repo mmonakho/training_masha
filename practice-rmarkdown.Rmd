@@ -1,0 +1,64 @@
+---
+title: "Practice RMarkdown"
+output: html_document
+date: "2023-02-28"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(readr)
+```
+
+## Introduction
+
+This data set contains diverse measurements of seawater chemistry along with supporting conductivity, temperature, and depth (CTD) data from the Arctic Ocean near the North Pole.
+
+The data was downloaded from [here] (https://arcticdata.io/catalog/view/doi:10.18739/A25T3FZ8X)
+
+
+## Read Data
+
+```{r }
+bg_chem <- read_csv("data/BGchem2008data.csv")
+```
+```{r exploration, echo=FALSE, eval=FALSE}
+colnames(bg_chem)
+
+str(bg_chem)
+
+head(bg_chem)
+```
+
+
+## Analysis
+
+
+
+## Calculate summary statistics 
+
+
+```{r summary}
+nitrate <- mean(bg_chem$NO3)
+
+nitrite <- mean(bg_chem$NO2)
+
+amm <- mean(bg_chem$NH4)
+
+phos <- mean(bg_chem$P)
+```
+
+## Calculate mean Redfield ratio 
+
+```{r mean}
+ratio <- (nitrate +nitrite + amm)/phos
+```
+
+The Redfield ratio in this dataset is approximately `r round(ratio)`
+
+## Plot Redfield ratio
+
+```{r plot}
+plot(bg_chem$P, bg_chem$NO2 + bg_chem$NO3 + bg_chem$NH4)
+```
+
