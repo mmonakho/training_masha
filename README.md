@@ -3,6 +3,6 @@ Coursework for ADC Reproducible Practices in R course
 
 Hi Masha!
 
-## git workflow - Masha's edits
+## chaos!!
 
 Hi Mitch! I like your cat!
