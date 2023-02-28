@@ -1,0 +1,2 @@
+# training_masha
+Coursework for ADC Reproducible Practices in R course
