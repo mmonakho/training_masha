@@ -94,3 +94,94 @@ catch_long <- catch_long %>%
 head(catch_long)
 ```
 
+## Practice group_by and summarize
+
+```{r}
+mean_region <- catch_long %>%
+  group_by(Region) %>%
+  summarize(catch_mean = mean(catch))
+
+head(mean_region)
+
+# summarize count by region
+
+n_region <- catch_long %>%
+  group_by(Region) %>%
+  summarize(count = n())
+
+head(n_region)
+```
+
+## Lesson on filtering
+
+```{r}
+ALU_catch <- catch_long %>%
+  filter(Region == "ALU")
+
+head(ALU_catch)
+```
+
+## Arrange some rows! sad-woo
+
+```{r}
+# arrange rows (by default from smallest to largest)
+mean_region_arrange <- catch_long %>%
+  group_by(Region) %>%
+  summarize(mean_catch = mean(catch)) %>%
+  arrange(mean_catch)
+
+head(mean_region_arrange)
+```
+## We're practicing our joins
+
+```{r}
+region_defs <- read.csv("https://knb.ecoinformatics.org/knb/d1/mn/v2/object/df35b.303.1") %>%
+  select(code, mgmtArea)
+head(region_defs)
+```
+
+## Join data
+```{r}
+catch_joined <- left_join(catch_long, region_defs, by = c("Region" = "code"))
+
+head(catch_joined)
+```
+
+## Get rid of "catch_thousands in "catch_long"
+
+```{r}
+# catch_long <- catch_long %>%
+# select(-catch_thousands)
+```
+
+```{r}
+region_defs <- region_defs %>%
+  rename(Region = code, Region_name = mgmtArea)
+catch_joined <- left_join(catch_long, region_defs, by = "Region")
+head(catch_joined)
+```
+
+```{r}
+sites_df <- data.frame(site = c("HAW-101",
+                                "HAW-103",
+                                "OAH-219",
+                                "MAI-039"))
+sites_df %>%
+  separate(site, c("island", "site_number"), "_")
+```
+ ## Unite
+```{r}
+dates_df <- data.frame(year = c("1930",
+                                "1930",
+                                "1930"),
+                       month = c("12",
+                                "12",
+                                "12"),
+                       day = c("14",
+                               "15",
+                               "16"))
+
+dates_df %>% 
+  unite(date, year, month, day, sep = "-")
+```
+ 
