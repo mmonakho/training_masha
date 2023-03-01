@@ -1,0 +1,96 @@
+---
+title: "Data Cleaning & Manipulation"
+author: "Masha Monakhova"
+date: "2023-03-01"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load Libraries
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(readr)
+```
+
+## Load our data
+
+```{r}
+# load data
+catch_original <- read.csv(url("https://knb.ecoinformatics.org/knb/d1/mn/v2/object/df35b.302.1", method = "libcurl"))
+
+```
+
+The select command from the dplyr package selects **columns*
+
+The filer command filters **rows**
+
+```{r}
+## Remove the All and notesRegCode columns from the catch_original data frame
+
+catch_data <- catch_original %>%
+  select(Region, Year, Chinook, Sockeye, Coho, Pink, Chum)
+
+# catch_data <- catch_original %>%
+#  select(-All, -notesRegCode)
+
+head(catch_data)
+
+glimpse(catch_data)
+```
+
+```{r}
+# Mutate chinook class from character to numeric
+catch_clean <- catch_data %>%
+  mutate(Chinook = as.numeric(Chinook))
+
+# search for NA value
+i <- which(is.na(catch_clean$Chinook))
+i
+
+# located our NA value! It's an uppercase I
+catch_data[i, ]
+
+catch_clean <- catch_data %>%
+  mutate(Chinook = if.else(Chinook == "I", "1", Chinook)) %>%
+  mutate(Chinook = as.integer(Chinook))
+
+```
+
+## Change shape of data using pivot longer and pivot wider
+
+```{r}
+# pivot longer practice
+catch_long <- catch_clean %>%
+  pivot_longer(cols = -c(Region, Year), names_to = "Species", values_to = "catch")
+
+View(catch_long)
+
+# pivot wide practice
+
+catch_wide <- catch_long %>%
+  pivot_wider(names_from = Species, values_from = catch)
+
+head(catch_wide)
+```
+
+## Practice renaming columns
+
+```{r}
+catch_long <- catch_long %>%
+  rename(catch_thousands = catch)
+```
+
+## Add columns with mutate function
+
+```{r}
+catch_long <- catch_long %>%
+  mutate(catch = catch_thousands * 1000)
+
+head(catch_long)
+```
+
