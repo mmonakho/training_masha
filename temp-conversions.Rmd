@@ -1,0 +1,35 @@
+---
+title: "temp_conversions"
+author: "Masha Monakhova"
+date: "2023-03-02"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+source("temp-conversions.R")
+source("ggplot-helpers.R")
+library(ggplot2)
+
+```
+
+```{r}
+airtemps <- seq(-100, 100, 10)
+airtemps_c <- fahr_to_celsius(airtemps)
+```
+
+```{r}
+temps_all <- convert_temps(airtemps)
+```
+
+```{r}
+# jeanette fixed this line, just a difference in the colum name
+ggplot(temps_all, mapping = aes(x = fahrenheit, y = celsius, color = kelvin))+
+#ggplot(temps_all, mapping = aes(x = fahr, y = celsius, color = kelvin))+
+  geom_point()+
+  custom_theme()
+```
+
